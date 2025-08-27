@@ -1,0 +1,41 @@
+import './bootstrap';
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router'
+
+// import './style.css' // kalau pakai TailwindCSS
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import '@fortawesome/fontawesome-free/css/all.min.css'
+
+
+// axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+
+// let token = document.querySelector('meta[name="csrf-token"]');
+// if (token) {
+//     axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
+// } else {
+//     console.error("CSRF token not found!");
+// }
+
+import axios from "axios"
+
+// supaya Laravel tahu ini request AJAX
+axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+
+// CSRF token (kalau pakai session-cookie Sanctum)
+const csrfToken = document.querySelector('meta[name="csrf-token"]');
+if (csrfToken) {
+    axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken.content;
+} else {
+    console.warn("CSRF token not found!");
+}
+
+// Bearer token (kalau pakai token-based Sanctum)
+const authToken = localStorage.getItem("token");
+if (authToken) {
+  axios.defaults.headers.common["Authorization"] = `Bearer ${authToken}`;
+}
+
+
+createApp(App).use(router).mount('#app')
