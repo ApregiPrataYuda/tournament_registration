@@ -12,13 +12,28 @@
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
         <RouterLink to="/Dashboard" class="nav-link d-flex align-items-center text-white" active-class="active">
-          <i class="bi bi-house-door me-2"></i> Dashboard
+          <i class="fas fa fa-home me-2"></i> Dashboard
         </RouterLink>
       </li>
+
       <li>
         <RouterLink to="/ListTeamRegister" class="nav-link d-flex align-items-center text-white" active-class="active">
-          <i class="bi bi-people me-2"></i> List Team Registration
+          <i class="fas fa fa-users me-2"></i> List Team Registration
         </RouterLink>
+      </li>
+
+
+       <li>
+        <RouterLink to="/ListTeamRegistration" class="nav-link d-flex align-items-center text-white" active-class="active">
+          <i class="fas fa fa-users me-2"></i> List Team Registration New
+        </RouterLink>
+      </li>
+
+
+       <li>
+        <button class="dropdown-item text-danger" @click="logout">
+            <i class="fas fa fa-upload me-2"></i> Logout
+          </button>
       </li>
    
     </ul>
@@ -26,9 +41,60 @@
   </aside>
 </template>
 
+
+
+
+
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import axios from 'axios'
+
+const router = useRouter()
+
+const token = localStorage.getItem('token')
+
+const user = ref({
+  name: 'Apregi P',
+  avatar: 'https://ui-avatars.com/api/?name=Apregi+P&background=0D6EFD&color=fff'
+})
+
+const logout = async () => {
+  if (!token) {
+    alert('Kamu belum login!')
+    return
+  }
+
+  try {
+    // sertakan token di header
+    const res = await axios.post(
+      '/api/logout',
+      {}, 
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    )
+
+    if (res.data.success) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      router.push('/')
+    } else {
+      alert(res.data.message)
+    }
+  } catch (err) {
+    console.error(err.response?.data || err)
+    alert('Logout gagal. Cek token atau koneksi API.')
+  }
+}
 </script>
+
+
+
+
+
 
 <style scoped>
 .sidebar {

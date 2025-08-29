@@ -39,6 +39,7 @@ import Register from '../pages/Auth/Register.vue'
 import RegisterTournament from '../pages/TournamentRegister/RegisterTournament.vue'
 import NotFound  from '../pages/NotFound/Error.vue'
 import ListTeamRegister  from '../pages/ListTeamReg/ListTeamRegister.vue'
+import ListTeamRegistration from '../pages/ListTeamRegistration/index.vue'
 
 const routes = [
   { path: '/', component: Login },
@@ -56,6 +57,12 @@ const routes = [
   { 
     path: '/ListTeamRegister', 
     component: ListTeamRegister,
+    meta: { requiresAuth: true }   
+  },
+
+  { 
+    path: '/ListTeamRegistration', 
+    component: ListTeamRegistration,
     meta: { requiresAuth: true }   
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
